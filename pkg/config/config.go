@@ -31,9 +31,9 @@ func DefaultConfig() *Config {
 			FileOpenError    string `yaml:"fileOpenError"`
 			MissingParameter string `yaml:"missingParameter"`
 		}{
-			FileNotFound:     "El archivo %s no existe",
-			FileOpenError:    "Error al abrir el archivo: %v",
-			MissingParameter: "Uso: %s <nombre_fichero>\nDebe proporcionar un nombre de fichero %s",
+			FileNotFound:     "File not found: %s",
+			FileOpenError:    "Cannot open file: %v",
+			MissingParameter: "Missing parameter: %s",
 		},
 	}
 }

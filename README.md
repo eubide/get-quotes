@@ -1,78 +1,78 @@
-# Random Line
+# Get Quote
 
-Una herramienta simple en Go para extraer líneas aleatorias de archivos de texto.
+A simple Go tool for extracting random lines from text files.
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
 get-quote/
-├── bin/                    # Directorio de salida de compilación
-├── cmd/                    # Comandos ejecutables
-│   └── get-quote/        # Comando principal
-├── pkg/                    # Código de paquetes
-│   ├── config/             # Manejo de configuración
-│   └── randomline/         # Funcionalidad de línea aleatoria
-├── src/                    # Archivos fuente
-│   └── files/              # Archivos de datos
-│       ├── quotes.lst      # Citas en inglés
-│       └── citas.lst       # Citas en español
-├── go.mod                  # Definición del módulo Go
-├── go.sum                  # Checksums de dependencias
-├── Makefile                # Automatización de construcción
-├── .get-quote.yaml    # Archivo de configuración
-└── README.md               # Documentación del proyecto
+├── bin/                    # Compilation output directory
+├── cmd/                    # Executable commands
+│   └── get-quote/          # Main command
+├── pkg/                    # Package code
+│   ├── config/             # Configuration handling
+│   └── randomline/         # Random line functionality
+├── src/                    # Source files
+│   └── files/              # Data files
+│       ├── quotes.lst      # Quotes in English
+│       └── citas.lst       # Quotes in Spanish
+├── go.mod                  # Go module definition
+├── go.sum                  # Dependency checksums
+├── Makefile                # Build automation
+├── .get-quote.yaml         # Configuration file
+└── README.md               # Project documentation
 ```
 
-## Instalación
+## Installation
 
 ```bash
-# Clonar el repositorio
+# Clone the repository
 git clone https://github.com/eubide/get-quote.git
 cd get-quote
 
-# Construir el ejecutable
+# Build the executable
 make build
 ```
 
-## Uso
+## Usage
 
 ```bash
-./bin/get-quote nombre_fichero
+./bin/get-quote filename
 ```
 
-Donde `nombre_fichero` es el nombre de un archivo en el directorio configurado (por defecto `src/files/`).
-La extensión `.lst` se añadirá automáticamente si no se proporciona.
+Where `filename` is the name of a file in the configured directory (default `src/files/`).
+The `.lst` extension will be added automatically if not provided.
 
-## Ejemplos
+## Examples
 
-Extraer una línea aleatoria del archivo quotes.lst:
+Extract a random line from the quotes.lst file:
 ```bash
 ./bin/get-quote quotes
 ```
 
-Extraer una línea aleatoria del archivo citas.lst:
+Extract a random line from the citas.lst file:
 ```bash
 ./bin/get-quote citas
 ```
 
-## Configuración
+## Configuration
 
-La aplicación utiliza un archivo de configuración YAML llamado `.get-quote.yaml`. El archivo de configuración puede colocarse en:
-1. El directorio actual
+The application uses a YAML configuration file called `.get-quote.yaml`. The configuration file can be placed in:
+1. The current directory
 2. `$HOME/.config/.get-quote/`
-3. El directorio home del usuario
+3. The user's home directory
 
-Si no se encuentra ningún archivo de configuración, se utilizan valores predeterminados.
+If no configuration file is found, default values are used.
 
-### Ejemplo de configuración
+### Configuration Example
 
 ```yaml
-# Configuración de Random Sentence
+# Random Sentence Configuration
 
 filesBaseDir: src/files
 defaultExtension: .lst
 errorMessages:
-  fileNotFound: "El archivo %s no existe"
-  fileOpenError: "Error al abrir el archivo: %v"
-  missingParameter: "Uso: %s <nombre_fichero>\nDebe proporcionar un nombre de fichero %s"
+  fileNotFound: "The file %s does not exist"
+  fileOpenError: "Error opening the file: %v"
+  missingParameter: "Usage: %s <filename>\nYou must provide a filename %s"
 ```

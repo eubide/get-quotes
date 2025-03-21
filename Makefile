@@ -14,3 +14,10 @@ clean:
 	rm -rf coverage.out
 	rm -rf coverage.html
 	rm -rf *.log
+
+
+deploy:build
+	cp bin/get-quote ~/bin/get-quote
+
+deploy-typinator:deploy
+	ln -sf ~/bin/get-quote /Users/eubide/Library/Application\ Support/Typinator/Sets/Includes/Scripts/get-quote
