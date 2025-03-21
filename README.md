@@ -57,12 +57,12 @@ Extract a random line from the citas.lst file:
 
 ## Configuration
 
-The application uses a YAML configuration file called `.get-quote.yaml`. The configuration file can be placed in:
-1. The current directory
-2. `$HOME/.config/.get-quote/`
-3. The user's home directory
+The application uses a YAML configuration file called `get-quote.yaml`. The configuration file can be placed in:
+1. The current directory: `get-quote.yaml`
+2. The Mac's confir dir: `$HOME/.config/get-quote/get-quote.yaml`
+3. The user's home directory `$HOME/.get-quote.yaml`
 
-If no configuration file is found, default values are used.
+If no configuration file is found, default values are used. 
 
 ### Configuration Example
 
