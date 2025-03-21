@@ -1,0 +1,8 @@
+# Random Sentence Configuration
+
+filesBaseDir: src/files
+defaultExtension: .lst
+errorMessages:
+  fileNotFound: "El archivo %s no existe"
+  fileOpenError: "Error al abrir el archivo: %v"
+  missingParameter: "Uso: %s <nombre_fichero>\nDebe proporcionar un nombre de fichero %s"
