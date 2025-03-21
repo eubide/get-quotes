@@ -46,5 +46,5 @@ func main() {
 	}
 
 	quote := reader.GetRandomQuote()
-	fmt.Println(quote)
+	fmt.Print(quote)
 }

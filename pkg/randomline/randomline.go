@@ -73,7 +73,8 @@ func GetRandomLine(fileName string, configPath string) (string, error) {
 	rng := randNewFunc(source)
 	randomIndex := rng.Intn(len(lines))
 
-	return lines[randomIndex], nil
+	// Return the line without any potential newline characters
+	return strings.TrimSpace(lines[randomIndex]), nil
 }
 
 // GetRandomLines returns a specified number of random lines from a text file
@@ -128,7 +129,8 @@ func GetRandomLines(filePath string, count int) ([]string, error) {
 	currentIndex := 0
 	for scanner.Scan() {
 		if selectedIndices[currentIndex] {
-			result = append(result, scanner.Text())
+			// Trim any potential newline characters from the line
+			result = append(result, strings.TrimSpace(scanner.Text()))
 		}
 		currentIndex++
 	}

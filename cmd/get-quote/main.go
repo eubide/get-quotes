@@ -26,6 +26,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Print the random line
-	fmt.Println(line)
+	// Print the random line without a newline
+	fmt.Print(line)
 }
