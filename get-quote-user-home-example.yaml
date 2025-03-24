@@ -1,0 +1,9 @@
+# Example configuration using tilde expansion
+# This shows how to use the user's home directory in the filesBaseDir path
+
+filesBaseDir: ~/.config/get-quote/quotes
+defaultExtension: .lst
+errorMessages:
+  fileNotFound: "The file %s does not exist"
+  fileOpenError: "Error opening the file: %v"
+  missingParameter: "Usage: %s <filename>\nYou must provide a filename %s"

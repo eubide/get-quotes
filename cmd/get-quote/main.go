@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 
@@ -11,11 +12,36 @@ import (
 )
 
 func main() {
-	// Initialize configuration
-	configPath := ".get-quote.yaml"
-	cfg, err := config.NewYAMLConfig(configPath)
+	// Parse command-line flags
+	configFile := flag.String("c", "", "Path to configuration file")
+	flag.Parse()
+
+	// Update os.Args for the CLI handler (removing the -c flag and its value if present)
+	if *configFile != "" {
+		// Create a new slice with the program name
+		newArgs := []string{os.Args[0]}
+		
+		// Add all arguments except -c and its value
+		for i := 1; i < len(os.Args); i++ {
+			if os.Args[i] == "-c" {
+				// Skip the -c flag and its value
+				i++
+				continue
+			} else if len(os.Args[i]) > 1 && os.Args[i][0] == '-' && os.Args[i][1] == 'c' {
+				// Skip -c flag combined with value (e.g. -cfile.yaml)
+				continue
+			}
+			newArgs = append(newArgs, os.Args[i])
+		}
+		
+		// Replace os.Args with the filtered version
+		os.Args = newArgs
+	}
+
+	// Initialize configuration based on the defined order of preference
+	cfg, err := config.NewYAMLConfigWithOrder(*configFile)
 	if err != nil {
-		fmt.Printf("Warning: Could not load config file: %v\n", err)
+		fmt.Printf("Warning: Using default configuration: %v\n", err)
 	}
 
 	// Initialize repository

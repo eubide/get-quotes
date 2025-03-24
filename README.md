@@ -103,14 +103,30 @@ Extract a random line from the citas.lst file:
 ./bin/get-quote citas
 ```
 
+Use a specific configuration file:
+```bash
+./bin/get-quote -c ~/my-custom-config.yaml quotes
+```
+
 ## Configuration
 
-The application uses a YAML configuration file called `get-quote.yaml`. The configuration file can be placed in:
-1. The current directory: `get-quote.yaml`
-2. The Mac's confir dir: `$HOME/.config/get-quote/get-quote.yaml`
-3. The user's home directory `$HOME/.get-quote.yaml`
+The application uses a YAML configuration file. The configuration file is searched in the following order of preference:
 
-If no configuration file is found, default values are used.
+1. Path specified with the `-c` flag (e.g., `./bin/get-quote -c /path/to/config.yaml quotes`)
+2. In the user's config directory: `$HOME/.config/get-quote/get-quote.yaml`
+3. In the user's home directory: `$HOME/.get-quote.yaml`
+4. In the current working directory: `get-quote.yaml`
+
+If no configuration file is found in any of these locations, default values are used.
+
+### Command-line Arguments
+
+```bash
+./bin/get-quote [options] <filename>
+```
+
+Options:
+- `-c <file>`: Specify a custom configuration file path
 
 ### Configuration Example
 
@@ -124,3 +140,18 @@ errorMessages:
   fileOpenError: "Error opening the file: %v"
   missingParameter: "Usage: %s <filename>\nYou must provide a filename %s"
 ```
+
+The `filesBaseDir` setting can use the tilde character (`~`) to represent the user's home directory. For example:
+
+```yaml
+# Will use the user's home directory directly
+filesBaseDir: ~
+
+# Will use $HOME/quotes directory
+filesBaseDir: ~/quotes  
+
+# Will use $HOME/.config/get-quote/quotes directory
+filesBaseDir: ~/.config/get-quote/quotes
+```
+
+Note that only the exact tilde (`~`) or a tilde followed by a slash (`~/`) will be expanded. Paths like `~user` will be left as-is.

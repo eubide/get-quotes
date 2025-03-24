@@ -15,15 +15,18 @@ import (
 // FileRepository implements the QuoteRepository interface using the file system
 type FileRepository struct {
 	config ports.ConfigProvider
+	rng    *rand.Rand
 }
 
 // NewFileRepository creates a new FileRepository instance
 func NewFileRepository(config ports.ConfigProvider) *FileRepository {
-	// Initialize random seed
-	rand.Seed(time.Now().UnixNano())
+	// Create a new random number generator with a source seeded from the current time
+	source := rand.NewSource(time.Now().UnixNano())
+	rng := rand.New(source)
 
 	return &FileRepository{
 		config: config,
+		rng:    rng,
 	}
 }
 
@@ -68,8 +71,8 @@ func (r *FileRepository) GetRandomQuote(filename string) (*domain.Quote, error) 
 		return domain.NewQuote(""), nil
 	}
 
-	// Select a random line
-	randomIndex := rand.Intn(len(lines))
+	// Select a random line using the local random number generator
+	randomIndex := r.rng.Intn(len(lines))
 	randomLine := lines[randomIndex]
 
 	return domain.NewQuote(randomLine), nil
