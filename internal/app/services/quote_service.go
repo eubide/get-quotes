@@ -31,3 +31,9 @@ func (s *QuoteServiceImpl) GetRandomQuote(filename string) (*domain.Quote, error
 	// Get a random quote from the repository
 	return s.repository.GetRandomQuote(filename)
 }
+
+// GetConfig returns the configuration provider used by the service
+// This is useful for adapters that need access to the configuration
+func (s *QuoteServiceImpl) GetConfig() ports.ConfigProvider {
+	return s.config
+}
