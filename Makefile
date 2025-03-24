@@ -1,4 +1,4 @@
-.PHONY: build run clean test test-verbose test-coverage test-html test-race test-pkg test-randomline test-quotereader
+.PHONY: build run clean deploy deploy-typinator
 
 # Build the application
 build:
