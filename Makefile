@@ -6,7 +6,7 @@ build:
 
 # Run the application with quotes file
 run: build
-	./bin/get-quote quotes
+	./bin/get-quote hi
 
 # Clean build artifacts
 clean:

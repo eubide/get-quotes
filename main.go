@@ -2,49 +2,34 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
-	"path/filepath"
-	"strings"
 
-	"github.com/eubide/get-quote/pkg/config"
-	"github.com/eubide/get-quote/pkg/quotereader"
+	"github.com/eubide/get-quote/internal/adapters/primary/cli"
+	"github.com/eubide/get-quote/internal/adapters/secondary/config"
+	"github.com/eubide/get-quote/internal/adapters/secondary/repository"
+	"github.com/eubide/get-quote/internal/app/services"
 )
 
 func main() {
-	// Load configuration from YAML file
-	cfg, err := config.LoadConfig(".get-quote.yaml")
+	// Initialize configuration
+	configPath := ".get-quote.yaml"
+	cfg, err := config.NewYAMLConfig(configPath)
 	if err != nil {
-		// Just log the error, we'll use default config
-		log.Printf("Warning: Could not load config file: %v", err)
+		fmt.Printf("Warning: Could not load config file: %v\n", err)
 	}
 
-	// Check if a file parameter was provided
-	if len(os.Args) < 2 {
-		log.Fatalf(cfg.ErrorMessages.MissingParameter, os.Args[0], cfg.DefaultExtension)
+	// Initialize repository
+	repo := repository.NewFileRepository(cfg)
+
+	// Initialize service
+	service := services.NewQuoteService(repo, cfg)
+
+	// Initialize CLI handler
+	handler := cli.NewCLIHandler(service)
+
+	// Execute the CLI handler
+	if err := handler.Execute(); err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
 	}
-
-	// Get the file parameter
-	fileParam := os.Args[1]
-
-	// Validate that the parameter has the correct extension
-	if !strings.HasSuffix(fileParam, cfg.DefaultExtension) {
-		fileParam += cfg.DefaultExtension // Add extension if not provided
-	}
-
-	// Construct the full path to the file in the files directory
-	quotesFile := filepath.Join(cfg.FilesBaseDir, fileParam)
-
-	// Check if the file exists
-	if _, err := os.Stat(quotesFile); os.IsNotExist(err) {
-		log.Fatalf(cfg.ErrorMessages.FileNotFound, quotesFile)
-	}
-
-	reader, err := quotereader.NewQuoteReader(quotesFile)
-	if err != nil {
-		log.Fatalf(cfg.ErrorMessages.FileOpenError, err)
-	}
-
-	quote := reader.GetRandomQuote()
-	fmt.Print(quote)
 }
