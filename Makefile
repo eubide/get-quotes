@@ -6,13 +6,12 @@ build:
 
 # Run the application with quotes file
 run: build
-	./bin/get-quote hi
+	./bin/get-quote -c get-quote.yaml quotes
+	./bin/get-quote -c get-quote.yaml citas
 
 # Clean build artifacts
 clean:
 	rm -rf bin/
-	rm -rf coverage.out
-	rm -rf coverage.html
 	rm -rf *.log
 
 
