@@ -4,28 +4,32 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/eubide/get-quote/pkg/randomline"
+	"github.com/eubide/get-quote/internal/adapters/primary/cli"
+	"github.com/eubide/get-quote/internal/adapters/secondary/config"
+	"github.com/eubide/get-quote/internal/adapters/secondary/repository"
+	"github.com/eubide/get-quote/internal/app/services"
 )
 
 func main() {
-	// Check if a file parameter was provided
-	if len(os.Args) < 2 {
-		fmt.Printf("Uso: %s <nombre_fichero>\n", os.Args[0])
-		fmt.Println("Debe proporcionar un nombre de fichero")
-		os.Exit(1)
+	// Initialize configuration
+	configPath := ".get-quote.yaml"
+	cfg, err := config.NewYAMLConfig(configPath)
+	if err != nil {
+		fmt.Printf("Warning: Could not load config file: %v\n", err)
 	}
 
-	// Get the file parameter
-	fileName := os.Args[1]
+	// Initialize repository
+	repo := repository.NewFileRepository(cfg)
 
-	// Get a random line from the file
-	configPath := ".get-quote.yaml"
-	line, err := randomline.GetRandomLine(fileName, configPath)
-	if err != nil {
+	// Initialize service
+	service := services.NewQuoteService(repo, cfg)
+
+	// Initialize CLI handler
+	handler := cli.NewCLIHandler(service)
+
+	// Execute the CLI handler
+	if err := handler.Execute(); err != nil {
 		fmt.Printf("Error: %v\n", err)
 		os.Exit(1)
 	}
-
-	// Print the random line without a newline
-	fmt.Print(line)
 }

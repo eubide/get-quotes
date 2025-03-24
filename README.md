@@ -2,16 +2,64 @@
 
 A simple Go tool for extracting random lines from text files.
 
+## Architecture
+
+This project follows the Hexagonal Architecture (also known as Ports and Adapters) and SOLID principles:
+
+### Hexagonal Architecture
+
+The hexagonal architecture separates the application into layers:
+
+1. **Domain Layer (Core)**: Contains the business logic and domain entities.
+   - `internal/core/domain`: Domain entities like Quote
+   - `internal/core/ports`: Interfaces that define how the core interacts with the outside world
+
+2. **Application Layer**: Implements use cases using the domain.
+   - `internal/app/services`: Services that implement the business logic
+
+3. **Adapters Layer**: Connects the application to external systems.
+   - **Primary/Driving Adapters**: Entry points to the application (CLI)
+   - **Secondary/Driven Adapters**: Implementations of ports that connect to external systems (file system, configuration)
+
+### SOLID Principles
+
+- **Single Responsibility Principle**: Each class has only one reason to change.
+  - The `QuoteRepository` is only responsible for retrieving quotes.
+  - The `ConfigProvider` is only responsible for configuration.
+
+- **Open/Closed Principle**: Software entities should be open for extension but closed for modification.
+  - New repository implementations can be added without changing existing code.
+
+- **Liskov Substitution Principle**: Objects should be replaceable with instances of their subtypes.
+  - Any implementation of `QuoteRepository` can be used interchangeably.
+
+- **Interface Segregation Principle**: Clients should not depend on interfaces they don't use.
+  - Interfaces are small and focused on specific functionality.
+
+- **Dependency Inversion Principle**: High-level modules should not depend on low-level modules.
+  - The core domain depends on abstractions (ports), not concrete implementations.
+
 ## Project Structure
+
+The project follows Hexagonal Architecture (Ports and Adapters) and SOLID principles:
 
 ```
 get-quote/
 ├── bin/                    # Compilation output directory
 ├── cmd/                    # Executable commands
 │   └── get-quote/          # Main command
-├── pkg/                    # Package code
-│   ├── config/             # Configuration handling
-│   └── randomline/         # Random line functionality
+├── internal/               # Internal packages
+│   ├── core/               # Domain layer (hexagon center)
+│   │   ├── domain/         # Domain entities
+│   │   └── ports/          # Ports (interfaces)
+│   ├── adapters/           # Adapters layer
+│   │   ├── primary/        # Primary/Driving adapters
+│   │   │   └── cli/        # CLI command handler
+│   │   └── secondary/      # Secondary/Driven adapters
+│   │       ├── config/     # Configuration adapter
+│   │       └── repository/ # Repository adapter
+│   └── app/                # Application layer
+│       └── services/       # Use cases implementation
 ├── src/                    # Source files
 │   └── files/              # Data files
 │       ├── quotes.lst      # Quotes in English
@@ -19,7 +67,7 @@ get-quote/
 ├── go.mod                  # Go module definition
 ├── go.sum                  # Dependency checksums
 ├── Makefile                # Build automation
-├── .get-quote.yaml         # Configuration file
+├── get-quote.yaml          # Configuration file
 └── README.md               # Project documentation
 ```
 
@@ -62,7 +110,7 @@ The application uses a YAML configuration file called `get-quote.yaml`. The conf
 2. The Mac's confir dir: `$HOME/.config/get-quote/get-quote.yaml`
 3. The user's home directory `$HOME/.get-quote.yaml`
 
-If no configuration file is found, default values are used. 
+If no configuration file is found, default values are used.
 
 ### Configuration Example
 
