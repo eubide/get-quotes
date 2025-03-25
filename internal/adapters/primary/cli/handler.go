@@ -54,9 +54,10 @@ func (h *CLIHandler) Execute() error {
 	quote, err := h.quoteService.GetRandomQuote(fileName)
 	if err != nil {
 		// Handle specific error types
-		switch e := err.(type) {
-		case *domain.FileNotFoundError:
-			return fmt.Errorf("error: %v\n\nAvailable files:\n%s", e, h.getAvailableFilesString())
+		switch err.(type) {
+		case *domain.DomainError:
+			// For file not found errors, show available files
+			return fmt.Errorf("error: %v\n\nAvailable files:\n%s", err, h.getAvailableFilesString())
 		default:
 			return err
 		}
